@@ -1,38 +1,129 @@
-<!-- index.html -->
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>热点切换</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>每日热点新闻</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f7fc;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      color: #333;
+    }
+    header {
+      background-color: #5e72e4;
+      color: white;
+      text-align: center;
+      padding: 20px 0;
+      font-size: 24px;
+    }
+    main {
+      padding: 20px;
+    }
+    .date-picker-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .date-picker-container label {
+      font-size: 18px;
+      margin-right: 10px;
+    }
+    .date-picker-container input {
+      padding: 10px;
+      font-size: 16px;
+      border: 2px solid #5e72e4;
+      border-radius: 5px;
+    }
+    #newsContainer {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+    }
+    h2 {
+      color: #5e72e4;
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    ul li {
+      background-color: #f9f9f9;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+    ul li:hover {
+      background-color: #efefef;
+    }
+    a {
+      text-decoration: none;
+      color: #333;
+      font-size: 18px;
+      font-weight: 500;
+    }
+    a:hover {
+      color: #5e72e4;
+    }
+    .footer {
+      text-align: center;
+      font-size: 14px;
+      color: #888;
+      padding: 20px;
+      background-color: #f4f7fc;
+      border-top: 1px solid #ddd;
+    }
+  </style>
 </head>
 <body>
-  <h1>每日热点（知乎 & CSDN）</h1>
-  <label>选择日期：
-    <input type="date" id="datePicker" max="{{today}}" value="{{today}}">
-  </label>
-  <div id="newsContainer">
-    <!-- 动态嵌入内容 -->
+
+  <header>
+    <h1>每日热点新闻</h1>
+  </header>
+
+  <main>
+    <div class="date-picker-container">
+      <label for="datePicker">选择日期：</label>
+      <input type="date" id="datePicker">
+    </div>
+
+    <div id="newsContainer">
+      <!-- 动态加载的新闻内容将出现在这里 -->
+    </div>
+  </main>
+
+  <div class="footer">
+    <p>数据来源：知乎 & CSDN，2025年热点新闻</p>
   </div>
-<script>
-function loadNews(date) {
-  const container = document.getElementById('newsContainer');
-  fetch(date + '.html')
-    .then(r => {
-      if (!r.ok) throw '无内容';
-      return r.text();
-    })
-    .then(html => container.innerHTML = html)
-    .catch(_ => container.innerHTML = '<p>暂无该日期内容。</p>');
-}
 
-document.getElementById('datePicker').addEventListener('change', e => {
-  loadNews(e.target.value);
-});
+  <script>
+    function loadNews(date) {
+      const container = document.getElementById('newsContainer');
+      fetch(date + '.html')
+        .then(r => {
+          if (!r.ok) throw '无内容';
+          return r.text();
+        })
+        .then(html => container.innerHTML = html)
+        .catch(_ => container.innerHTML = '<p>暂无该日期内容。</p>');
+    }
 
-// 初始化
-const today = new Date().toISOString().slice(0,10);
-document.getElementById('datePicker').max = today;
-loadNews(today);
-</script>
+    document.getElementById('datePicker').addEventListener('change', e => {
+      loadNews(e.target.value);
+    });
+
+    // 初始化
+    const today = new Date().toISOString().slice(0,10);
+    document.getElementById('datePicker').max = today;
+    loadNews(today);
+  </script>
+
 </body>
 </html>
